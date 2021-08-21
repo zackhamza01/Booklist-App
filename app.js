@@ -105,22 +105,34 @@ document.querySelector('#book-form').addEventListener('submit', (e) => {
     if (title === '' || author === '' || isbn === '') {
         UI.showAlert("Please fill in all fields.", "danger");
     } else {
-        // Instantiating Book
-        const book = new Book(title, author, isbn);
+        if (isbn.length != 13 || !isNumeric(isbn)) {
+            UI.showAlert("The ISBN number is invalid. Make sure it is a 13-digit number.", "danger");
+        } else {
+            // Instantiating Book
+            const book = new Book(title, author, isbn);
 
-        //Add book to UI
-        UI.addBookToList(book);
+            //Add book to UI
+            UI.addBookToList(book);
 
-        //Add book to local storage
-        Store.addBook(book);
+            //Add book to local storage
+            Store.addBook(book);
 
-        //Success alert for adding
-        UI.showAlert("Book added successfully.", "success");
+            //Success alert for adding
+            UI.showAlert("Book added successfully.", "success");
 
-        // Clear input fields
-        UI.clearFields();
+            // Clear input fields
+            UI.clearFields();
+        }
+        
     }
 });
+
+function isNumeric(string) {
+    if (typeof string != "string") {
+        return false;
+    } 
+    return !isNaN(string) && !isNaN(parseFloat(string));
+}
 
 // Event: Remove a book
 document.querySelector("#book-list").addEventListener('click', (e) => {
